@@ -1,39 +1,156 @@
-function addClick() {
-    $('ul').on('click', 'button.shopping-item-toggle', event => {
-        event.preventDefault();
-        event.stopPropagation();
-        $(event.target).closest('li').find('.shopping-item').addClass('shopping-item__checked');
-    });
+const startButton = document.getElementById('start-btn')
+const nextButton = document.getElementById('next-btn')
+const questionContainerElement = document.getElementById('question-container')
+const questionElement = document.getElementById('question')
+const answerButtonsElement = document.getElementById('answer-buttons')
+const resultsContainer = document.getElementById('results');
+let countRightAnswers = 0;
+let shuffledQuestions, currentQuestionIndex
+
+startButton.addEventListener('click', startGame)
+nextButton.addEventListener('click', () => {
+  currentQuestionIndex++
+  render()
+})
+
+function startGame() {
+  startButton.classList.add('hide')
+  shuffledQuestions = questions.sort(() => Math.random() - 1)
+  currentQuestionIndex = 0
+  questionContainerElement.classList.remove('hide')
+  render()
+  countRightAnswers = 0;
 }
 
-
-function deleteItems() {
-    $('ul').on('click', 'button.shopping-item-delete', event => {
-        event.preventDefault();
-        event.stopPropagation();
-        $(event.target).closest('li').remove();
-    });
-}
-function addItems() {
-    $('#js-shopping-list-form').on('submit', event => {
-        event.preventDefault();
-        event.stopPropagation();
-        let userText = $(".js-shopping-list-entry").val();
-        $('.shopping-list').append(`<li>
-        <span class="shopping-item">Sample</span>
-        <div class="shopping-item-controls">
-          <button class="shopping-item-toggle">
-            <span class="button-label">check</span>
-          </button>
-          <button class="shopping-item-delete">
-            <span class="button-label">delete</span>
-          </button>
-        </div>
-        </li>`);
-    });
+function render() {
+  resetState()
+  showQuestion(shuffledQuestions[currentQuestionIndex])
 }
 
+function showQuestion(question) {
+  questionElement.innerText = question.question
+  question.answers.forEach(answer => {
+    const button = document.createElement('button')
+    button.innerText = answer.text
+    button.classList.add('btn')
+    if (answer.correct) {
+      button.dataset.correct = answer.correct
+    }
+    button.addEventListener('click', selectAnswer)
+    answerButtonsElement.appendChild(button)
+  })
+}
 
-$(addClick);
-$(deleteItems);
-$(addItems);
+function resetState() {
+  clearStatusClass(document.body)
+  nextButton.classList.add()
+  while (answerButtonsElement.firstChild) {
+    answerButtonsElement.removeChild(answerButtonsElement.firstChild)
+  }
+}
+
+function selectAnswer(e) {
+  const selectedButton = e.target
+  const correct = selectedButton.dataset.correct
+  setStatusClass(document.body, correct)
+  Array.from(answerButtonsElement.children).forEach(button => {
+    setStatusClass(button, button.dataset.correct)
+  })
+  if (shuffledQuestions.length > currentQuestionIndex + 1) {
+    nextButton.classList.remove('hide')
+  } else {
+    startButton.innerText = 'Restart'
+    startButton.classList.remove('hide')
+     if (selectedButton.dataset = correct) {
+    countRightAnswers++;
+     }
+     document.getElementById('right-answers').innerHTML = countRightAnswers;
+  }
+}
+
+function setStatusClass(element, correct) {
+  clearStatusClass(element)
+  if (correct) {
+    element.classList.add('correct')
+  } else {
+    element.classList.add('wrong')
+  }
+}
+
+function clearStatusClass(element) {
+  element.classList.remove('correct')
+  element.classList.remove('wrong')
+}
+
+const questions = [
+  {
+    question: 'What is the stock symbol for Google?',
+    answers: [
+      { text: 'GOOG', correct: true },
+      { text: 'NIO', correct: false },
+      { text: 'KO', correct: false },
+      { text: 'They do not have one', correct: false }
+    ]
+  },
+  {
+    question: 'How many stocks are on the S&P 500?',
+    answers: [
+      { text: '550', correct: false },
+      { text: '500', correct: true },
+      { text: '100', correct: false },
+      { text: '5000', correct: false }
+    ]
+  },
+  {
+    question: 'What is the stock symbol for Coke?',
+    answers: [
+      { text: 'KO', correct: true },
+      { text: 'CO', correct: false },
+      { text: 'PEP', correct: false },
+      { text: 'They do not have one', correct: false }
+    ]
+  },
+  {
+    question: 'What does P/E stand for?',
+    answers: [
+      { text: 'Price to Earnings', correct: true },
+       { text: 'Price to sales', correct: false },
+        { text: 'Price to Price', correct: false },
+         { text: 'I have no idea', correct: false },
+    ]
+  },
+  {
+    question: 'What is a mutual fund?',
+    answers: [
+      { text: 'A basket of stocks', correct: true },
+       { text: 'One stock of a company', correct: false },
+        { text: 'A bond', correct: false },
+         { text: 'I have no idea', correct: false },
+    ]
+  }]
+  /**
+ * 
+ * Technical requirements:
+ * 
+ * Your app should include a render() function, that regenerates the view each time the store is updated. 
+ * See your course material and access support for more details.
+ *
+ * NO additional HTML elements should be added to the index.html file.
+ *
+ * You may add attributes (classes, ids, etc) to the existing HTML elements, or link stylesheets or additional scripts if necessary
+ *
+ * SEE BELOW FOR THE CATEGORIES OF THE TYPES OF FUNCTIONS YOU WILL BE CREATING 👇
+ * 
+ */
+
+/********** TEMPLATE GENERATION FUNCTIONS **********/
+
+// These functions return HTML templates
+
+/********** RENDER FUNCTION(S) **********/
+
+// This function conditionally replaces the contents of the <main> tag based on the state of the store
+
+/********** EVENT HANDLER FUNCTIONS **********/
+
+// These functions handle events (submit, click, etc)
