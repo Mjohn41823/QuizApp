@@ -1,16 +1,22 @@
 const startButton = document.getElementById('start-btn')
 const nextButton = document.getElementById('next-btn')
 const questionContainerElement = document.getElementById('question-container')
+const counterDisplayElem = document.querySelector('counter-display');
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons')
 const resultsContainer = document.getElementById('results');
 let countRightAnswers = 0;
+let currentQuestion = 1;
 let shuffledQuestions, currentQuestionIndex
 
 startButton.addEventListener('click', startGame)
 nextButton.addEventListener('click', () => {
   currentQuestionIndex++
-  render()
+  render();
+currentQuestion++; 
+  document.getElementById('current-question').innerHTML = currentQuestion;
+
+
 })
 
 function startGame() {
@@ -19,7 +25,14 @@ function startGame() {
   currentQuestionIndex = 0
   questionContainerElement.classList.remove('hide')
   render()
+
+  currentQuestion = 1;
+ 
   countRightAnswers = 0;
+
+   
+
+
 }
 
 function render() {
@@ -40,7 +53,6 @@ function showQuestion(question) {
     answerButtonsElement.appendChild(button)
   })
 }
-
 function resetState() {
   clearStatusClass(document.body)
   nextButton.classList.add()
@@ -61,11 +73,20 @@ function selectAnswer(e) {
   } else {
     startButton.innerText = 'Restart'
     startButton.classList.remove('hide')
-     if (selectedButton.dataset = correct) {
+  if (selectedButton.dataset = correct) {
     countRightAnswers++;
      }
      document.getElementById('right-answers').innerHTML = countRightAnswers;
   }
+
+
+if (selectedButton.dataset = correct) {
+    countRightAnswers++; 
+  }
+
+  
+  
+
 }
 
 function setStatusClass(element, correct) {
@@ -82,9 +103,13 @@ function clearStatusClass(element) {
   element.classList.remove('wrong')
 }
 
+
+
+
+
 const questions = [
   {
-    question: 'What is the stock symbol for Google?',
+    question: ' Question 5: What is the stock symbol for Google?',
     answers: [
       { text: 'GOOG', correct: true },
       { text: 'NIO', correct: false },
@@ -93,7 +118,7 @@ const questions = [
     ]
   },
   {
-    question: 'How many stocks are on the S&P 500?',
+    question: 'Question 4: How many stocks are on the S&P 500?',
     answers: [
       { text: '550', correct: false },
       { text: '500', correct: true },
@@ -102,7 +127,7 @@ const questions = [
     ]
   },
   {
-    question: 'What is the stock symbol for Coke?',
+    question: 'Question 3: What is the stock symbol for Coke?',
     answers: [
       { text: 'KO', correct: true },
       { text: 'CO', correct: false },
@@ -111,7 +136,7 @@ const questions = [
     ]
   },
   {
-    question: 'What does P/E stand for?',
+    question: 'Question 2: What does P/E stand for?',
     answers: [
       { text: 'Price to Earnings', correct: true },
        { text: 'Price to sales', correct: false },
@@ -120,7 +145,7 @@ const questions = [
     ]
   },
   {
-    question: 'What is a mutual fund?',
+    question: 'Question 1: What is a mutual fund?',
     answers: [
       { text: 'A basket of stocks', correct: true },
        { text: 'One stock of a company', correct: false },
