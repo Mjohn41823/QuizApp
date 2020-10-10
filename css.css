@@ -13,7 +13,7 @@ body {
   height: 100vh;
   justify-content: center;
   align-items: center;
-  background-color:khaki;
+  background-color:rgb(241, 235, 175);
 }
 
 body.correct {
@@ -78,4 +78,5 @@ body.wrong {
 .hide {
   display: none;
 }
+
 
